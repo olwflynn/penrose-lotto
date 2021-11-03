@@ -11,5 +11,9 @@
     "hardhat": "^2.5.0",
     "web3": "^1.5.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@drizzle/store": "^1.5.3",
+    "@openzeppelin/contracts": "^4.2.0",
+    "@truffle/hdwallet-provider": "^1.5.1"
+  }
 }

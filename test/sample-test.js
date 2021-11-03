@@ -1,5 +1,6 @@
 const Greeter = artifacts.require("Greeter");
 Greeter.numberFormat = 'String';
+const PenroseToken = artifacts.require("PenroseToken")
 
 const { ethers } = require("hardhat");
 
@@ -14,6 +15,13 @@ contract("Greeter", (accounts) => {
     assert.equal(await greeter.greet(), "Hola, mundo!");
   });
 });
+
+contract("PenroseToken", (accounts) => {
+    it("Should return same total supply as was initiated", async function () {
+        const tokenInst = await PenroseToken.new(10^18);
+        assert.equal(await tokenInst.getSupply(), 10^18)
+    })
+})
 
 // Vanilla Mocha test. Increased compatibility with tools that integrate Mocha.
 describe("Greeter contract", function () {
