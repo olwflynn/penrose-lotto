@@ -5,11 +5,11 @@ contract PenroseToken is ERC20 {
 
     event ValueReceived(address user, uint amount);
     address public minter;
-    string public testString = "Hope this works!";
 
     constructor(uint initialSupply) ERC20("Penrose", "PNR") public {
-        _mint(msg.sender, initialSupply);
         minter = msg.sender;
+        _mint(minter, initialSupply);
+
     }
 
     function getSupply() public view returns(uint) {
@@ -20,12 +20,25 @@ contract PenroseToken is ERC20 {
         return super.balanceOf(_address);
     }
 
-    // buyToken should require e.g. numberTokens per ETH
+    // buyToken should require e.g. numberTokens per ETH or msg.value
 
-    function buyToken(uint numberTokens) payable public {
-        super.transfer(msg.sender, numberTokens);
+    function buyToken(uint numberTokens, uint tokenPrice) payable public {
+        require(msg.value > numberTokens*tokenPrice, "Did not transfer enough ETH");
+        //set allowance of msg.sender to zero first and then approve the numberofTokens
+        // NEED TO CHANGE TO INCORPORSTE NON UNITY PRICES
+//        _approve(msg.sender, 0);
+//        _approve(msg.sender, msg.value);
+//        super.transferFrom(minter, msg.sender, numberTokens);
+        sendTokenFromMinter(msg.sender, numberTokens);
         emit ValueReceived(msg.sender, msg.value);
     }
+
+    function sendTokenFromMinter(address receiver, uint numberTokens) internal {
+        super._transfer(minter, receiver, numberTokens);
+    }
+
+    // Need to figure out what the default in the init migration and then make sure that what is being sent in the UI is
+    // appropriate when buying a token
 
     // pickWinner should only be used by the minter i.e. contract creator and should randomly pick a winner
     // from all the token holders
