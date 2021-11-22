@@ -16,5 +16,5 @@ Run the following commands:
 * [in the console] migrate --> runs the migrations defined in /migrations to write the contracts to the local blockchain
 
 ## Start the frontend app
-Run the following commands:
+In the /client directory run the following commands:
 * npm start --> starts a locally hosted app on port 3000 which can be viewed from any browser

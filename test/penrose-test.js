@@ -28,16 +28,17 @@ contract("PenroseToken", (accounts) => {
          assert.equal(minterBalance.valueOf(), supply)
      })
 
-    it("Should transfer the right amount of tokens from minter to buyer and ETH from buyer to minter", async function () {
+    it("Should transfer the right amount of tokens from minter to buyer and ETH from buyer to contract", async function () {
 
           // starting balance is 0
       const buyer = accounts[1]
       const startTokenBalance = await tokenInst.getERCBalance.call(buyer);
+      const startContractETHBalance = await web3.eth.getBalance(tokenInst.address)
       assert.equal(startTokenBalance, 0);
 
       const tx = await tokenInst.buyToken(1, 1 , {
                   from: buyer,
-                  to: minter,
+                  to: tokenInst.address,
                   value: 10
                   });
     //
@@ -46,19 +47,34 @@ contract("PenroseToken", (accounts) => {
       const endTokenBalance = await tokenInst.getERCBalance.call(buyer);
       assert.equal(Number(endTokenBalance), Number(startTokenBalance) + 1);
 
+      const endContractETHBalance = await web3.eth.getBalance(tokenInst.address)
+      assert.equal(Number(endContractETHBalance), Number(startContractETHBalance) + 10)
+    })
+
 // ADD test for reverting if price is too high
 
 
-//
+      it("Randomly select one of the addresses from all token holders", async function () {
+        let winner;
+        let tokenHolders;
+        let tokenHolderA = accounts[1];
+        let tokenHolderB = accounts[2];
+        let tokenHolderC = accounts[3];
 
+        tokenHolders = [tokenHolderA, tokenHolderB, tokenHolderC]
+        console.log(tokenHolders);
+        for(let i=0; i < tokenHolders.length; i++) {
 
-//          // assert that account[0] now has 1 token
-//          var newAccountTokenBalance = await tokenInst.balanceOf(accounts[1]);
-//          console.log(newAccountTokenBalance, "--- this is the NEW toekn balance")
+            var tx = await tokenInst.buyToken(1, 1 , {
+              from: tokenHolders[i],
+              to: tokenInst.address,
+              value: 10
+              });
+        }
 
-//          assert.equal(newAccountTokenBalance, 1);
+        winner = await tokenInst.pickWinner.call()
+        assert(tokenHolders.includes(winner), "Winner is not in tokenHolders")
+        })
 
-
-      })
 
  })

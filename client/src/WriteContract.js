@@ -12,11 +12,11 @@ class WriteContract extends React.Component {
     buyTokens = () => {
         const { drizzle, drizzleState } = this.props;
         const contract = drizzle.contracts.PenroseToken;
-        console.log("Address that is buying tokens is: ", drizzleState.accounts[0])
-        contract.methods.buyToken(1).send({
+        console.log("Address that is buying tokens is: ", drizzleState.accounts[1])
+        contract.methods.buyToken(1, 100).send({
             from: drizzleState.accounts[1],
             to: contract.address,
-            value: 10^10
+            value: 1000
             })
         this.setState({numTokensBought: 1})
 

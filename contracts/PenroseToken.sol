@@ -5,6 +5,7 @@ contract PenroseToken is ERC20 {
 
     event ValueReceived(address user, uint amount);
     address public minter;
+    address public latestWinner;
 
     constructor(uint initialSupply) ERC20("Penrose", "PNR") public {
         minter = msg.sender;
@@ -37,17 +38,19 @@ contract PenroseToken is ERC20 {
         super._transfer(minter, receiver, numberTokens);
     }
 
-    // Need to figure out what the default in the init migration and then make sure that what is being sent in the UI is
-    // appropriate when buying a token
 
     // pickWinner should only be used by the minter i.e. contract creator and should randomly pick a winner
     // from all the token holders
 
 //    function pickWinner() public returns(address) {
 //        require(msg.sender == minter);
-        // logic to pick winner e.g. get latest block ... randomness
-        // address winner =
-//         return winner;
+//         latestWinnerIndex = random();
+//        latestWinner =
+//         return latestWinner;
+//    }
+
+//    function random(uint numTokenHolders) private view returns (uint8) {
+//        return uint8(uint256(keccak256(block.timestamp, block.difficulty))%numTokenHolders);
 //    }
 
 }

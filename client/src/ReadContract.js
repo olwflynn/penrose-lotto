@@ -7,7 +7,11 @@ class ReadContract extends React.Component {
     this.state = {
         'randomState': "",
         "supply": "",
-        "address": ""
+        "address": "",
+        "buyerAddress": "",
+        "buyerTokensCount": "",
+        "minterAddress": "",
+        "minterTokensCount": "",
 
         }
   }
@@ -30,10 +34,23 @@ class ReadContract extends React.Component {
 
       const address = contract.address;
       this.setState( { address });
+      const minterAddress = drizzleState.accounts[0];
+      const buyerAddress = drizzleState.accounts[1];
+      this.setState({minterAddress})
+      this.setState({buyerAddress})
 
-              // save the `dataKey` to local component state for later reference
-          console.log(this)
+        let getBuyerTokensCount = contract.methods.getERCBalance(buyerAddress).call().then( buyerTokensCount => {
+          console.log(buyerTokensCount);
+          this.setState({ buyerTokensCount });
+        })
+        let getMinterTokensCount = contract.methods.getERCBalance(minterAddress).call().then( minterTokensCount => {
+                  console.log(minterTokensCount);
+                  this.setState({ minterTokensCount });
+                })
+      console.log(this, "This is everything")
+
       }
+
 
 
 
@@ -51,6 +68,10 @@ class ReadContract extends React.Component {
                  <h2>Details about the game: </h2>
                  <p>Contract address is: {this.state.address} </p>
                  <p>Total supply of Penrose Tokens is: {this.state.supply} </p>
+                 <p>Minter address is: {this.state.minterAddress} </p>
+                 <p>Number of tokens owned by minter is: {this.state.minterTokensCount} </p>
+                 <p>Buyer address is: {this.state.buyerAddress} </p>
+                 <p>Number of tokens owned by buyer is: {this.state.buyerTokensCount} </p>
          </div>
 
     )
